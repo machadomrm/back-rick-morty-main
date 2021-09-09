@@ -1,0 +1,34 @@
+[
+	{
+		"nome": "Nake Terminator",
+		"imagemUrl": "https://rickandmortyapi.com/api/character/avatar/577.jpeg"
+	},
+	{
+		"nome": "Aqua Morty",
+		"imagemUrl": "https://rickandmortyapi.com/api/character/avatar/21.jpeg"
+	},
+	{
+		"nome": "Rick Sanchez",
+		"imagemUrl": "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+	},
+	{
+		"nome": "Corn detective",
+		"imagemUrl": "https://rickandmortyapi.com/api/character/avatar/403.jpeg"
+	},
+	{
+		"nome": "Annie",
+		"imagemUrl": "https://rickandmortyapi.com/api/character/avatar/17.jpeg"
+	},
+	{
+		"nome": "Squanchy",
+		"imagemUrl": "https://rickandmortyapi.com/api/character/avatar/331.jpeg"
+	},
+	{
+		"nome": "Conroy",
+		"imagemUrl": "https://rickandmortyapi.com/api/character/avatar/71.jpeg"
+	},
+	{
+		"nome": "Veronica Ann Bennet",
+		"imagemUrl": "https://rickandmortyapi.com/api/character/avatar/376.jpeg"
+	}
+]
