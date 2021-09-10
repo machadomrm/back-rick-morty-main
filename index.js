@@ -1,3 +1,5 @@
+/*jshint esversion: 6 /
+/jshint esversion: 8 */
 const express = require("express");
 const mongodb = require("mongodb");
 const ObjectId = mongodb.ObjectId;
@@ -116,16 +118,35 @@ require("dotenv").config();
 		}
 	);
 	//console.Log(result);
+	//Se acontecer algum erro no MongoDb, cai na seguinte validação
+	if(result.acknowledged == "undefined") {
+		res.status(500).send({error: "Ocorreu um erro ao atualizar o personagem"});
+		return;
+	}
 
-			
+	//[DELETE] Apaga um personagem		
 	app.delete("/personagens/:id", async (req, res) => {
 		const id = req.params.id;
+		//Retorna a quantidade de personagem com o filtro (Id) especificado
+		const quantidadePersonagens = await personagens.countDocuments({
+			_id: Object(id),
+		});
+		//Checar se existe o personagem solicitado
+		if (quantidadePersonagens !== 1) {
+			res.status(404).send({error: "Personagem não encontrado"});
+			return;
+		}
+		//Deletar personagem
+		const result = await personagem.deleteOne({
+			_id: Object(id),
+		});
+		//Se não consegue apagar, erro do Mongo
+		if (result.deleteCount !== 1) {
+			res.status(500).send({error: "Ocorreu um erro ao remover o personagem"});
+			return;
+		}	
 
-		res.send(
-			await personagens.deleteOne({
-				_id: ObjectId(id),
-			})
-		);
+		res.send(204);
 	});
 
 	app.listen(port, () => {
