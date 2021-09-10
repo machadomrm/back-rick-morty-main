@@ -56,42 +56,68 @@ require("dotenv").config();
 	app.get("/personagens/:id", async (req, res) => {
 		const id = req.params.id;
 		const personagem = await getPersonagemById(id);
+		if(!personagem){
+			res.status(404).send({error:"O personagem especificado não foi encontrado."});
+			return;
+		}
 		res.send(personagem);
 	});
 
+	//[POST] Adiciona personagem
 	app.post("/personagens", async (req, res) => {
 		const objeto = req.body;
 
 		if (!objeto || !objeto.nome || !objeto.imagemUrl) {
-			res.send("Objeto invalido");
+			res.status(400).send(
+				{error:"Personagem inválido, certifique-se que tenha os campos nome e imagemUrl"}
+				);
 			return;
 		}
 
-		const insertCount = await personagens.insertOne(objeto);
-		console.log(insertCount);
-		if (!insertCount) {
-			res.send("Ocorreu um erro");
+		const result = await personagens.insertOne(objeto);
+
+		console.log(result);
+		//Se ocorrer algum erro com o mongoDb esse if vai detectar
+		if (result.acknowledged == false) {
+			res.status (500).send("Ocorreu um erro");
 			return;
 		}
 
-		res.send(objeto);
+		res.status(201).send(objeto);
 	});
 
+	//[PUT] Atualiza personagem
 	app.put("/personagens/:id", async (req, res) => {
 		const id = req.params.id;
 		const objeto = req.body;
-		res.send(
-			await personagens.updateOne(
-				{
-					_id: ObjectId(id),
-				},
-				{
-					$set: objeto,
-				}
-			)
+
+		if (!objeto || !objeto.nome || !objeto.imagemUrl) {
+		res.status(400).send(
+			{error: "Requisição inválida, certifique-se que tenha os campos nome e imagemUrl"}
 		);
+		return;
+	}
+
+	const quantidadePersonagens = await personagens.countDocuments({
+		_id: ObjectId(id),
 	});
 
+	if (quantidadePersonagens !== 1) {
+		res.status(404).send({error: "Personagem não encontrado"});
+		return;
+	}
+	
+	const result = await personagens.updateOne(
+		{
+			_id: Object(id),
+		},
+		{
+			$set: objeto,
+		}
+	);
+	//console.Log(result);
+
+			
 	app.delete("/personagens/:id", async (req, res) => {
 		const id = req.params.id;
 
