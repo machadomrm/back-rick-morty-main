@@ -4,6 +4,7 @@ const express = require("express");
 const mongodb = require("mongodb");
 const ObjectId = mongodb.ObjectId;
 require("dotenv").config();
+require('express-async-errors');
 
 (async () => {
 	const dbUser = process.env.DB_USER;
@@ -43,8 +44,14 @@ require("dotenv").config();
 		next();
 	});
 
-	app.get("/", (req, res) => {
-		res.send({ info: "Olá, Blue" });
+	app.all("/*", (req, res, next) => {
+		"Access-Control-Allow-Headers",
+		"Access-Control-Allow-Headers, Origin, Accept, X-Requested-With",
+	};
+
+	app.get("/", async (req, res) => {
+		const teste = underfined;
+		res.send({ info: "Olá, Blue" + teste.sdsa });
 	});
 
 	//[GET] GetAllPersonagens
@@ -147,6 +154,21 @@ require("dotenv").config();
 		}	
 
 		res.send(204);
+	});
+	//Tratamento de errors
+	//MiddLeware verifica endpoints
+	app.all("*", function(req, res) {
+		res.status(404).send({message: "Endpoint was not found",
+	});
+	});
+
+	//MiddLeware -> Tratamento de erro
+	app.use(error, req, res, next) => {
+		res.status(error.status || 500).send({
+		    error: {
+			     status: error.status || 500,
+			     message: error.message || "Internal Server Error",
+		},
 	});
 
 	app.listen(port, () => {
